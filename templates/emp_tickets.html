@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %} View Tickets {% endblock title %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Authors table</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table ">
+              <thead>
+                <tr class="bg-secondary text-light">
+                  <th class="text-center" >Sr.</th>
+                  <th class="text-center" >Submitted By</th>
+                  <th class="text-center" >Assigned To</th>
+                  <th class="text-center" >Open Date</th>
+                  <th class="text-center" >Type</th>
+                  <th class="text-center" >Project</th>
+                  <th class="text-center" >Close Date</th>
+                  <th class="text-center">Description</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-center">Action</th>  
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in allTicket %}
+                  <tr>
+                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7" scope="row">{{forloop.counter}}</th>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{item.Ticket_subBy}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{item.Ticket_assignTo}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{item.Ticket_openDate}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{item.Ticket_type}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{item.Ticket_project}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{item.Ticket_closedDate}}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-info" onclick="modalData('{{item.Ticket_des}}')" data-bs-toggle="modal" data-bs-target="#viewmodal" data-itemid="{{ item.id }}">
+                        View
+                      </button>
+                    </td>
+
+                  {% if item.Ticket_isApprove == True %}
+                    <td class="text-center text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-success" >Approved</span></td>
+                  {% elif item.Ticket_isApprove == False %}
+                    <td class="text-center text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-danger">Rejected</span></td>
+                  {% else %}
+                    <td class="text-center text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-warning">Pending</span></td>
+                  {% endif %}
+
+
+                  {% if  item.Ticket_isComplete == True %}
+                  <td class="text-center ">
+                    <button class="btn btn-sm btn-outline-success "  data-toggle="tooltip" data-original-title="Complete Ticket" disabled>
+                      <i class="fa fa-check-circle"></i> Completed
+                    </button>
+                  </td>
+                  {% else %}
+                  <td class="text-center">
+                    <button onclick="updateValue('{{item.id}}')" class="btn btn-sm btn-outline-success reload-button" data-toggle="tooltip" data-original-title="Complete Ticket">
+                      <i class="fa fa-check-circle"></i>  Mark Complete
+                    </button>
+                  </td>
+                  {% endif %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--View Description Modal-->
+<!-- item_modal.html -->
+<div class="modal fade" id="viewmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewmodal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-title">
+          Description
+        </h1>
+        <span type="button" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa fa-times text-secondary"></i>
+        </span>
+      </div>
+      <div class="modal-body">
+        <p id="modal-item-description"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

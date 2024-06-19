@@ -1,0 +1,173 @@
+{% extends 'admin/adminBase.html' %}
+
+{% block title %} View All Employees {% endblock title %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Employee table</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table ">
+              <thead>
+                <tr class="bg-secondary text-light">
+                  <th class="text-center" >Sr.</th>
+                  <th class="text-center" >Name</th>
+                  <th class="text-center" >Gender</th>
+                  <th class="text-center" >Email</th>
+                  <th class="text-center">Post</th>
+                  <th class="text-center">Date of Birth</th>
+                  <th class="text-center">Designation</th>
+                  <th class="text-center" >Department</th>
+                  <th class="text-center">Is Active</th>
+                  <th class="text-center">Is Manager</th>
+                  <th class="text-center">Added at</th>
+                  <th class="text-center">Contact</th>  
+                  <th class="text-center">About</th> 
+                  <th class="text-center">Action</th> 
+                </tr>
+              </thead>
+              <tbody>
+                {% for emp in allEmployee %}
+                  <tr>
+                    <th class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7" scope="row">{{forloop.counter}}</th>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{emp.name}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.gender}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.email}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{emp.Post}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.dateOfBirth}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.designation}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7 ps-2">{{emp.department}}</td>
+
+                    {% if emp.IsActive == True %}
+                    <td class="text-center text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-success" >{{emp.IsActive}}</span></td>
+                    {% else %}
+                    <td class="text-center text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-danger">{{emp.IsActive}}</span></td>
+                    {% endif %}
+
+                    {% if emp.IsManager == True %}
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-success">{{emp.IsManager}}</span></td>
+                    {% else %}
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7"><span class="badge bg-danger">{{emp.IsManager}}</span></td>
+                    {% endif %}
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.createdDate}}</td>
+                    <td class="text-center text-uppercase text-secondary text-sm font-weight-bold opacity-7">{{emp.contact}}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-info" onclick="modalEmpData('{{emp.about}}')" data-bs-toggle="modal" data-bs-target="#viewmodal" data-itemid="{{ emp.id }}">
+                        View
+                      </button>
+                    </td>
+                    <td class="text-center ">
+                      <button class="btn btn-sm btn-outline-info" data-toggle="tooltip" data-original-title="Delete Emp" data-bs-toggle="modal"
+                      data-bs-target="#editEmpmodal">
+                        <i class="fa fa-pen"></i>  Edit
+                      </button>
+
+                      <button  onclick="deleteEmp({{ emp.id }})" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-original-title="Delete Emp">
+                        <i class="fa fa-trash"></i>  Delete
+                      </button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--View Description Modal-->
+<!-- item_modal.html -->
+<div class="modal fade" id="viewmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewmodal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-title">
+          Description
+        </h1>
+        <span type="button" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa fa-times text-secondary"></i>
+        </span>
+      </div>
+      <div class="modal-body">
+        <p id="modal-emp-about"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Employee info -->
+<div class="modal fade" id="editEmpmodal" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="editEmpmodalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updateFormodalLabel">
+                    Update Profile Information
+                </h1>
+                <span type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times text-secondary"></i>
+                </span>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="POST" id="updateForm" action="{% url 'update_profile' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label class="form-label">Full Name: </label>
+                        <input type="name" class="form-control border p-2"
+                            name="name" placeholder="Enter full name" value={{name}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Mobile: </label>
+                        <input type="text" class="form-control border p-2"
+                            name="contact" placeholder="Enter mobile number" value={{contact}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Email: </label>
+                        <input type="email" class="form-control border p-2"
+                            name="email" placeholder="Enter email" value={{email}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Password: </label>
+                        <input type="password" class="form-control border p-2"
+                            name="password" placeholder="Enter Password" value={{password}}>
+                    </div>
+                    <div class="select-group select-group-outline mb-2">
+                        <label for="location" class="form-label">Location:
+                        </label>
+                        <input type="designation" class="form-control border p-2"
+                        name="designation" placeholder="Enter designation" value={{designation}}>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="abouttxt" class="form-label">About: </label>
+                        <textarea class="form-control border p-1" name="about"
+                            rows="3" id="abouttxt"
+                            placeholder="Write your abouts..." >{{about}}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                            <i class="fa fa-pen"></i> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock body %}

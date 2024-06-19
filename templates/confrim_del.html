@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title>Delete Item</title>
+</head>
+<body>
+    <h1>Delete Item</h1>
+    <ul>
+        {% for item in allTicket %}
+            <li>
+                <button onclick="deleteItem({{ item.id }})">Delete</button>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

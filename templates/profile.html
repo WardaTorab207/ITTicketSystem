@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %} My Profile {% endblock title %}
+
+{% block body %}
+<div class="page-header min-height-300 border-radius-xl mt-4"
+    style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');">
+    <span class="mask  bg-gradient-primary  opacity-6"></span>
+</div>
+<div class="card card-body mx-3 mx-md-4 mt-n6">
+    <div class="row gx-4 mb-2">
+        <div class="col-auto">
+            <div class="avatar avatar-xl position-relative">
+                <img src="../static/assets/img/profileIMG.png"
+                    alt="profile_image"
+                    class="w-100 border-radius-lg shadow-sm">
+            </div>
+        </div>
+        <div class="col-auto my-auto">
+            <div class="h-100">
+                <h5 class="mb-1">
+                    {{name}}
+                </h5>
+            </div>
+        </div>
+        <div
+            class="col-lg-2 col-md-4 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+            <div class="nav-wrapper position-relative end-0">
+                <ul>
+                    <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0"
+                            id="dropdownMenuButton" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa fa-cog cursor-pointer"></i><span>
+                                Settings</span>
+                        </a>
+                        <ul
+                            class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
+                            aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item border-radius-md"
+                                    href="/logout">
+                                    <div class="d-flex py-1">
+                                        <div
+                                            class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-1 text-danger">
+                                                <i class="fa fa-sign-out"></i><span>
+                                                    Logout</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-12 col-xl-4">
+                <div class="card card-plain h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row">
+                            <div class="col-md-8 d-flex align-items-center">
+                                <h6 class="mb-0">About</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <p class="text-sm">
+                            {{about}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-xl-4">
+                <div class="card card-plain h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row">
+                            <div class="col-md-8 d-flex align-items-center">
+                                <h6 class="mb-0">Profile Information</h6>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <!-- Button trigger Update Profile Information Modal -->
+                                <button type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#updateFormodal">
+                                    <i class="fas fa-user-edit text-sm"
+                                        title="Edit Profile"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <ul class="list-group">
+                            <li
+                                class="list-group-item border-0 ps-0 pt-0 text-sm"><strong
+                                    class="text-dark">Full Name:</strong> &nbsp;
+                                {{name}}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm"><strong
+                                    class="text-dark">Mobile:</strong> &nbsp;
+                                {{contact}}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm"><strong
+                                    class="text-dark">Email:</strong> &nbsp;
+                                {{email}}</li>
+                            <li class="list-group-item border-0 ps-0 text-sm">
+                                <strong class="text-dark">Location:</strong>
+                                &nbsp;
+                                {{designation}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Update Profile Information Modal -->
+<div class="modal fade" id="updateFormodal" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateFormodalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updateFormodalLabel">
+                    Update Profile Information
+                </h1>
+                <span type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa fa-times text-secondary"></i>
+                </span>
+            </div>
+            <div class="modal-body">
+                <form role="form" method="POST" id="updateForm" action="{% url 'update_profile' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label class="form-label">Full Name: </label>
+                        <input type="name" class="form-control border p-2"
+                            name="name" placeholder="Enter full name" value={{name}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Mobile: </label>
+                        <input type="text" class="form-control border p-2"
+                            name="contact" placeholder="Enter mobile number" value={{contact}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Email: </label>
+                        <input type="email" class="form-control border p-2"
+                            name="email" placeholder="Enter email" value={{email}}>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Password: </label>
+                        <input type="password" class="form-control border p-2"
+                            name="password" placeholder="Enter Password" value={{password}}>
+                    </div>
+                    <div class="select-group select-group-outline mb-2">
+                        <label for="location" class="form-label">Location:
+                        </label>
+                        <input type="designation" class="form-control border p-2"
+                        name="designation" placeholder="Enter designation" value={{designation}}>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="abouttxt" class="form-label">About: </label>
+                        <textarea class="form-control border p-1" name="about"
+                            rows="3" id="abouttxt"
+                            placeholder="Write your abouts..." >{{about}}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+                            <i class="fa fa-pen"></i> Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("updateForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent default form submission behavior
+      var form = event.target;
+  
+      // Perform an AJAX request to submit the form data
+      fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+      })
+      .then(function(response) {
+        if (response.ok) {
+          // Update any necessary elements on the page
+          // For example, display a success message
+          alert("Employee has been updated successfully!");
+  
+          // You can optionally perform additional actions here, such as refreshing the page or updating specific elements
+          // For example:
+          // window.location.reload(); // Refresh the page
+          // document.getElementById("someElement").textContent = "Updated"; // Update an element
+        } else {
+          // Handle the response if there was an error
+          alert("Error occurred while updating the employee.");
+        }
+      })
+      .catch(function(error) {
+        // Handle any network or other errors
+        alert("An error occurred while processing the request.");
+      });
+    });
+  </script>
+{% endblock body %}

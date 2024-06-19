@@ -1,0 +1,94 @@
+{% extends 'admin/adminBase.html' %}
+
+{% block title %} Add Tickets{% endblock title %}
+
+{% block body %}
+<div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h4 class="text-white text-capitalize ps-3 text-center">Add Ticket</h4>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+            <form role="form" method="POST" action="{% url 'admin-addTicket' %}" autocomplete="off">
+                {% csrf_token %}
+                <div class="form-group mb-4">
+                        <label class="form-label ps-3 mt-3">Ticket description: </label>
+                        <div style="margin-left: 234px; margin-top: -37px;">
+                            <textarea class="form-control border p-2 w-75" name="ticket_description" placeholder="Write description... "></textarea>
+                        </div>
+                </div>
+                <div class="select-group select-group-outline mb-4">
+                    <label for="location" class="form-label ps-3 mt-3l">Assign to: </label>
+                    <div style="margin-left: 234px; margin-top: -37px;">
+                        <select class="form-select p-1 w-75" id="location" name="asgEmp"> 
+                            <option selected>Select </option>
+                            {% for employee in allEmployee  %}
+                                {% if not employee.IsManager %}
+                                    <option value="{{employee.name}}">{{employee.name}}</option>
+                                {% endif %}         
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="select-group select-group-outline mb-4">
+                    <label for="location" class="form-label ps-3 mt-3l">Submitted by: </label>
+                    <div style="margin-left: 234px; margin-top: -37px;">
+                        <select class="form-select p-1 w-75" id="location" name="SubEmp">
+                            <option selected>Select </option>
+                            {% for employee in allEmployee  %}
+                                <option value="{{employee.name}}">{{employee.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="select-group select-group-outline mb-4">
+                    <label for="location" class="form-label ps-3 mt-3l">Type: </label>
+                    <div style="margin-left: 234px; margin-top: -37px;">
+                        <select class="form-select p-1 w-75" id="location" name="Type">
+                            <option selected>Select </option>
+                            <option value="Hardware Issues">Hardware Issues</option>
+                            <option value="Softwere Issues">Softwere Issues</option>
+                            <option value="Project">Project</option>
+                            <option value="Wrong Data">Wrong Data Entered in DashBoard</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="select-group select-group-outline mb-4">
+                    <label for="location" class="form-label ps-3 mt-3l">Project: </label>
+                    <div style="margin-left: 234px; margin-top: -37px;">
+                        <select class="form-select p-1 w-75" id="location" name="Project">
+                            <option selected>Select </option>
+                            {% for Project in project_list %}
+                                <option value= "{{ Project }}">{{Project}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="select-group select-group-outline mb-4">
+                    <label for="location" class="form-label ps-3 mt-3l">Urgency: </label>
+                    <div style="margin-left: 234px; margin-top: -37px;">
+                        <select class="form-select p-1 w-75" id="location" name="Urgency">
+                            <option selected>Select </option>
+                            <option value="critical">Critical Urgent</option>
+                            <option value="asap">As soon as Possible</option>
+                            <option value="notUrgent">Not Urgent</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="card-footer ">
+                    <button type="submit" class="btn btn-primary my-4 ms-3 mb-1">
+                        <i class="fa fa-save " ></i> Add
+                    </button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}
